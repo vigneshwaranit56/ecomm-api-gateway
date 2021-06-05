@@ -1,0 +1,122 @@
+version: "3"
+volumes:
+  prometheus_data: {}
+  
+services:
+
+  ecomm-discovery-service:
+    image: ecomm-discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - test-network
+      
+  ecomm-api-gateway:
+    image: ecomm-api-gateway
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8765:8765"
+    depends_on:
+      -  ecomm-discovery-service
+      -  ecomm-product-service
+      -  ecomm-cart-service
+      -  ecomm-order-service
+      -  ecomm-payment-service
+      -  ecomm-order-history-service
+      -  ecomm-user-mgmt-service
+      -  ecomm-review-service
+      -  ecomm-inventory-mgmt-service
+    networks:
+      - test-network
+     
+  ecomm-product-service: 
+    image: ecomm-product-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8001:8001"
+    depends_on:
+      -  ecomm-discovery-service
+    networks:
+      - test-network
+  
+  ecomm-cart-service:
+    image: ecomm-cart-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8002:8002"
+    depends_on:
+      -  ecomm-discovery-service
+    networks:
+      - test-network
+   
+  ecomm-order-service:
+    image: ecomm-order-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8003:8003"
+    depends_on:
+      -  ecomm-discovery-service
+    networks:
+      - test-network
+      
+  ecomm-payment-service:
+    image: ecomm-payment-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8004:8004"
+    depends_on:
+      - ecomm-discovery-service
+    networks:
+      - test-network
+      
+  ecomm-order-history-service:
+    image: ecomm-order-history-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8005:8005"
+    depends_on:
+      - ecomm-discovery-service
+    networks:
+      - test-network
+      
+  ecomm-user-mgmt-service:
+    image: ecomm-user-mgmt-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8006:8006"
+    depends_on:
+      - ecomm-discovery-service
+    networks:
+      - test-network
+      
+  ecomm-review-service:
+    image: ecomm-review-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8007:8007"
+    depends_on:
+      - ecomm-discovery-service
+    networks:
+      - test-network
+      
+  ecomm-inventory-mgmt-service:
+    image: ecomm-inventory-mgmt-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://ecomm-discovery-service:8761/eureka/
+    ports:
+      - "8008:8008"
+    depends_on:
+      - ecomm-discovery-service
+    networks:
+      - test-network
+   
+networks:
+  test-network:
